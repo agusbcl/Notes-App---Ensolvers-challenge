@@ -1,0 +1,47 @@
+﻿@using Ensolvers_Challenge.Frontend.Services;
+@using Ensolvers_Challenge.Frontend.Services.Interfaces;
+@using Ensolvers_Challenge.Shared.Dtos.NoteDtos;
+@using Ensolvers_Challenge.Shared.Enums;
+
+
+<div class="note">
+
+    @foreach (var category in NoteItem.Categories)
+    {
+        <MudChip Color="Color.Primary" Size="Size.Small" OnClose="() => RemoveCategory(category.Id)">@category.Name</MudChip>
+    }
+
+    @if (CategoriesList.Count != NoteItem.Categories.Count)
+    {
+        <MudIconButton Icon="@Icons.Material.Filled.Add" Size="Size.Small" OnClick="ToggleCategory"></MudIconButton>
+    }
+
+    <MudPopover Open="@_isOpen" AnchorOrigin="Origin.TopCenter" TransformOrigin="Origin.TopCenter">
+        <div class="float-end">
+            <MudIconButton Icon="@Icons.Material.Filled.Close" Size="Size.Small" OnClick="ToggleCategory"></MudIconButton>
+        </div>
+        @foreach (var availableCategory in CategoriesList.Where(x => !NoteItem.Categories.Select(x => x.Id).Contains(x.Id)))
+        {
+            <MudChip Color="Color.Primary" Size="Size.Small" OnClick="() => AddCategory(availableCategory)">@availableCategory.Name</MudChip>
+        }
+    </MudPopover>
+
+
+    <div class="note-btns">
+        <MudIconButton Class="m-1" Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" @onclick="@EditNoteAsync" />
+        <MudIconButton Class="m-1" Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" @onclick="@DeleteNoteAsync" />
+
+        @if (NoteItem.Status == (int)NoteStatus.Active)
+        {
+            <MudIconButton Class="m-1" Icon="@Icons.Material.Filled.Archive" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" @onclick="() => ChangeNoteStatus(NoteStatus.Archived)" />
+        }
+        else
+        {
+            <MudIconButton Class="m-1" Icon="@Icons.Material.Filled.Archive" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" @onclick="() => ChangeNoteStatus(NoteStatus.Active)" />
+        }
+    </div>
+
+    <p class="note-title">@NoteItem.Title</p>
+    <p class="note-content text-break">@NoteItem.Description</p>
+
+</div>

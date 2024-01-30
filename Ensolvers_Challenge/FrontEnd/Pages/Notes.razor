@@ -1,0 +1,43 @@
+﻿@page "/Notes"
+@using Ensolvers_Challenge.Frontend.Services;
+@using Ensolvers_Challenge.Frontend.Services.Interfaces;
+@using Ensolvers_Challenge.Shared.Dtos.NoteDtos;
+@using Ensolvers_Challenge.Shared.Enums;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Ensolvers_Challenge.Shared
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.AspNetCore.Components.Forms;
+@attribute [Authorize]
+
+<PageTitle>Notes</PageTitle>
+<h2>Notes</h2>
+<MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="AddNote" disabled="@(!IsStatusActive)">Add Note</MudButton>
+<MudButton Variant="Variant.Outlined" Color="Color.Primary" @onclick="() => SwitchStatus(NoteStatus.Active)" disabled="@(IsStatusActive)">Filter Active Notes</MudButton>
+<MudButton Variant="Variant.Outlined" Color="Color.Primary" @onclick="() => SwitchStatus(NoteStatus.Archived)" disabled="@(!IsStatusActive)">Filter Archived Notes</MudButton>
+
+<div class="d-flex align-baseline">
+    <p>Filter by category: </p>
+    <MudChipSet SelectedChip="_selectedCategory" SelectedChipChanged="FilterByCategory" Filter="true">
+        @foreach (var category in CategoriesList)
+        {
+            <MudChip Value="@category.Id" Color="Color.Primary" Size="Size.Medium">@category.Name</MudChip>
+        }
+    </MudChipSet>
+</div>
+
+@if (NotesList == null || NotesList.Count == 0)
+{
+    <span>No notes available</span>
+}
+else
+{
+    <div class="container">
+        <div class="note-container">
+            @foreach (var note in NotesList)
+            {
+                <Note NoteItem="@note" @bind-NotesList="@NotesList" NoteStatus="@StatusValue" CategoriesList="@CategoriesList" CategoryId="SelectedCategoryValue"></Note>
+            }
+        </div>
+    </div>
+}

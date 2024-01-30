@@ -1,0 +1,20 @@
+﻿<EditForm Model="@UpdateNoteDto" OnValidSubmit="SubmitForm">
+    <DataAnnotationsValidator />
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="title" @bind-Value="UpdateNoteDto.Title"
+                          For="@(() => UpdateNoteDto.Title)"
+                          HelperText="Title is required."></MudTextField>
+        </MudCardContent>
+    </MudCard>
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="description" @bind-Value="UpdateNoteDto.Description"
+                          For="@(() => UpdateNoteDto.Description)"
+                          HelperText="Description is required."></MudTextField>
+        </MudCardContent>
+    </MudCard>
+
+    <MudButton ButtonType="ButtonType.Submit" Class="mr-4 mt-4">submit</MudButton>
+    <MudButton ButtonType="ButtonType.Button" OnClick="@Close" Class="mr-4 mt-4">cancel</MudButton>
+</EditForm>
